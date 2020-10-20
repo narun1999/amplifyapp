@@ -27,7 +27,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { connect } from 'react-redux'
-
+import Title from "./Title";
 // const timeElapsed = Date.now();
 // const today = new Date(timeElapsed);
 const axios = require('axios')
@@ -126,7 +126,7 @@ class Dashboard extends Component {
 
     calldata = async (num, accessToken) => {
 
-        let status 
+        let status
         var res = await axios({
             method: 'get',
             url: `https://employee-satisfaction-su-2d1c4.firebaseio.com/dashboard/${num}.json`,
@@ -138,7 +138,7 @@ class Dashboard extends Component {
             status = false
             return err.data
         })
-        
+
         //console.log(Object.keys(res))
         if (status === true && res !== null) {
             this.props.dispatch({
@@ -185,6 +185,11 @@ class Dashboard extends Component {
             type: 'SET_BAR',
             data: mydata
         })
+        if (this.props.reducer.ChartTypeReducer === 'Bar Chart') {
+            this.props.dispatch({
+                type: 'SHOW_BAR'
+            })
+        }
     }
 
     createdatasource_piechart = (data) => {
@@ -212,15 +217,19 @@ class Dashboard extends Component {
             Group: group,
             Question: question
         }
-
         this.props.dispatch({
             type: 'SET_PIE',
             data: mydata
         })
+        if (this.props.reducer.ChartTypeReducer === 'Pie Chart') {
+            this.props.dispatch({
+                type: 'SHOW_PIE'
+            })
+        }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     responseGoogleOnFail = (err) => {
         alert('เกิดข้อผิดพลาด ', err)
     }
@@ -246,9 +255,7 @@ class Dashboard extends Component {
                     <Grid container spacing={3} >
                         <Grid item xs={12} className={classes.GridCenter}>
                             <Paper className={classes.paper}>
-                                <Typography variant="h5">
-                                    กรุณาเลือกวันที่ที่ต้องการ
-                                </Typography>
+                                <Title>กรุณาเลือกวันที่ที่ต้องการ</Title>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                     <DatePicker
                                         minDate={new Date(2020, 7, 24)}
@@ -278,7 +285,7 @@ class Dashboard extends Component {
                                     onFailure={this.responseGoogleOnFail}
                                     cookiePolicy={'single_host_origin'}
                                 />
-                                
+
                             </Paper>
 
                         </Grid>
@@ -304,9 +311,7 @@ class Dashboard extends Component {
                                 this.props.reducer.BarChartReducer.Bar.map((converted, index) => (
                                     <Grid item xs={6} sm={6} className={classes.GridCenter}>
                                         <Paper className={classes.paper}>
-                                            <Typography variant="h5">
-                                                {this.props.reducer.BarChartReducer.Group[index]}
-                                            </Typography>
+                                            <Title>{this.props.reducer.BarChartReducer.Group[index]}</Title>
                                             <br />
                                             <ResponsiveContainer width="100%" height={300}>
                                                 <BarChart
@@ -333,9 +338,7 @@ class Dashboard extends Component {
                                 this.props.reducer.PieChartReducer.Pie.map((datapie, index) => (
                                     <Grid item xs={6} sm={6} className={classes.GridCenter}>
                                         <Paper className={classes.paper}>
-                                            <Typography variant="h5">
-                                                {this.props.reducer.PieChartReducer.Group[index]}
-                                            </Typography>
+                                            <Title>{this.props.reducer.PieChartReducer.Group[index]}</Title>
                                             <br />
                                             <Typography variant="h5">
                                                 {this.props.reducer.PieChartReducer.Question[index]}
