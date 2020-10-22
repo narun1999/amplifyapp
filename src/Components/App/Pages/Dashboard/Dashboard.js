@@ -130,7 +130,7 @@ class Dashboard extends Component {
         var res = await axios({
             method: 'get',
             url: `https://employee-satisfaction-su-2d1c4.firebaseio.com/dashboard/${num}.json`,
-            headers: { 'Authorization': `Bearer ${accessToken}` }
+            
         }).then((res) => {
             status = true
             return res.data
