@@ -277,7 +277,7 @@ class Dashboard extends Component {
                                         <Button variant="contained" color="primary"
                                             onClick={renderProps.onClick}
                                             disabled={renderProps.disabled}>
-                                            Summit
+                                            ยืนยัน
                                         </Button>
                                     )}
                                     scope='https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/firebase.database'
