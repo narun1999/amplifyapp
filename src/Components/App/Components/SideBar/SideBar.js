@@ -49,7 +49,7 @@ const SideBar = Props => {
             <div className={classes.drawerContainer}>
                 <List>
                     
-                        <ListItem button component={Link} to="/dashboard" >
+                        <ListItem button component={Link} to="/" >
                             <ListItemIcon>
                             <DashboardIcon />
                             </ListItemIcon>

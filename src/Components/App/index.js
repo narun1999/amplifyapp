@@ -48,7 +48,8 @@ function App() {
           <Toolbar />
           <Switch>
             <Route path="/question" component={Question} />
-            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/" component={Dashboard} />
+            <Dashboard/>
           </Switch>
         </main>
       </div>
