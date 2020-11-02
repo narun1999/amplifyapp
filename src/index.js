@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './Components/App';
 import { Provider } from 'react-redux'
-import { createStore/*, applyMiddleware*/ } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import Reducer from './Components/App/reducer'
-// import logger from 'redux-logger'
+import logger from 'redux-logger'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage/session'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -18,7 +18,7 @@ const persistConfig = {
 }
 
 const persistedReducer = persistReducer(persistConfig, Reducer)
-const store = createStore(persistedReducer/*, applyMiddleware(logger)*/)
+const store = createStore(persistedReducer, applyMiddleware(logger))
 const persistor = persistStore(store)
 
 
@@ -26,7 +26,7 @@ ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <React.StrictMode>
-        <App />
+        <App /> 
       </React.StrictMode>
     </PersistGate>
   </Provider>,

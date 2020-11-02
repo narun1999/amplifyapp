@@ -18,6 +18,7 @@ import ButtonSelectDate from './ButtonSelectDate'
 import adddate from './adddate'
 import DateQuestionReducer from './DateQuestionReducer'
 import tileDataReducer from './tileDataReducer'
+import loginStatus from './loginStatus'
 
 export default combineReducers({
     adddate,
@@ -38,5 +39,6 @@ export default combineReducers({
     DateDashboardReducer,
     ButtonSelectDate,
     DateQuestionReducer,
-    tileDataReducer
+    tileDataReducer,
+    loginStatus
 })
