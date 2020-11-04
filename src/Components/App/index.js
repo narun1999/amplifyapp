@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Navbar from "./Components/NavBar/Navbar"
 import SideBar from "./Components/SideBar/SideBar"
 import { Toolbar } from '@material-ui/core'
@@ -43,8 +43,8 @@ class App extends React.Component {
                 <Toolbar />
                 <Switch>
                   <Route path="/question" component={Question} />
-                  <Route path="/dashboard" component={Dashboard} />
-                  
+                  <Route path="/" component={Dashboard} />
+                  <Dashboard/>
                 </Switch>
               </main>
             </div>

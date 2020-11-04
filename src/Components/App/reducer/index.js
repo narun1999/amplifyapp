@@ -3,7 +3,6 @@ import addnumberReducer from './addnumberReducer'
 import formReducer from './formReducer'
 import showformReducer from './showformReducer'
 import showquestionReducer from './showquestionReducer'
-import showprogressReducer from './showprogressReducer'
 import GroupNameReducer from './GroupNameReducer'
 import ButtonCreateForm from './ButtonCreateForm'
 import showgraphReducer from './showgraphReducer'
@@ -26,7 +25,6 @@ export default combineReducers({
     formReducer,
     showformReducer,
     showquestionReducer,
-    showprogressReducer,
     GroupNameReducer,
     ButtonCreateForm,
     showgraphReducer,

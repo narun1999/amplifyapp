@@ -4,6 +4,8 @@ export default (state = "", action) => {
         return action.data
       case "CLEAR_GROUP":
         return state;
+      case "INIT_GROUP":
+        return ""
       default:
         return state;
     }

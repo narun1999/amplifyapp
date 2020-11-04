@@ -336,6 +336,7 @@ class MainForm extends Component {
                             {this.props.reducer.showformReducer &&
                                 <Paper className={classes.paper} elevation={3}>
                                     <div>
+                                        <Title>กรุณากรอกข้อมูล</Title>
                                         <br />
                                         {makeform(this.props.reducer.addnumberReducer.num)}
                                         <br />
