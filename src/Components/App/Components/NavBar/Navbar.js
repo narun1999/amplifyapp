@@ -85,7 +85,7 @@ class NavBar extends React.Component{
                     <Typography variant="h6" className={classes.title} noWrap>
                         Employee Sentiment
                     </Typography>
-                    <Button variant="contained" color="secondary" onClick={this.handleClick}>Logout</Button>
+                    {/* <Button variant="contained" color="secondary" onClick={this.handleClick}>Logout</Button> */}
                 </Toolbar>
             </AppBar>
         )

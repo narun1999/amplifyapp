@@ -34,7 +34,7 @@ class App extends React.Component {
     const { classes } = this.props;
     return (
       <div>
-        {this.props.reducer.loginStatus ?
+        
           <Router>
             <div className={classes.root}>
               <Navbar />
@@ -48,8 +48,8 @@ class App extends React.Component {
                 </Switch>
               </main>
             </div>
-          </Router> : <LoginForm />
-        }
+          </Router>
+        
       </div>
     );
   }
