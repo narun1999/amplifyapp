@@ -190,7 +190,7 @@ class MainForm extends Component {
     handleSubmit = async (e) => {
         e.preventDefault(); //ไม่ต้องเปลี่ยนหน้า
         await this.submit()
-        const num = this.getNum.value; //ดีงค่าจาก <input>
+        // const num = this.getNum.value; //ดีงค่าจาก <input>
         const groupname = this.groupName.value
         const cur_groupname = this.props.reducer.GroupNameReducer
         const letters = /^[A-Za-z][A-Za-z0-9_]+$/g
@@ -205,16 +205,16 @@ class MainForm extends Component {
                 type: 'CLEAR_FORM'
             })
         }
-        if (num > 0 && num <= 10 && groupname !== "" && letters.test(groupname)) {
-            const data = {
-                id: Date.now(),
-                num,
-            }
-            //const groupNameData = this.props.reducer.GroupNameReducer
-            this.props.dispatch({
-                type: 'ADD_NUM',
-                data
-            });
+        if (/*num > 0 && num <= 10 && */groupname !== "" && letters.test(groupname)) {
+            // const data = {
+            //     id: Date.now(),
+            //     num,
+            // }
+            // //const groupNameData = this.props.reducer.GroupNameReducer
+            // this.props.dispatch({
+            //     type: 'ADD_NUM',
+            //     data
+            // });
             this.props.dispatch({
                 type: "ADD_GROUP",
                 data: groupname
@@ -298,6 +298,25 @@ class MainForm extends Component {
         }
     }
 
+    setChoice = (e) => {
+        let num = document.getElementById("number_of_choice").value
+        if (num > 0 && num <= 10) {
+            const data = {
+                id: Date.now(),
+                state: true,
+                num,
+            }
+            this.props.dispatch({
+                type: 'ADD_NUM',
+                data
+            });
+        }
+        else {
+            alert("กรุณากรอกข้อมูลให้ถูกต้องครบถ้วนครับ")
+        }
+        console.log(num)
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -322,7 +341,7 @@ class MainForm extends Component {
 
                                     </MuiPickersUtilsProvider>
                                     <form onSubmit={this.handleSubmit}>
-                                        <TextField required type="number" id="number_of_choice" variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><AssignmentOutlinedIcon /></InputAdornment>) }} fullWidth inputProps={{ min: "1", max: "10" }} label="ระบุจำนวนคำตอบ" helperText="Positive Integer(1-10)" inputRef={(input) => this.getNum = input} defaultValue={this.props.reducer.addnumberReducer.num} /><br /><br />
+                                        {/* <TextField required type="number" id="number_of_choice" variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><AssignmentOutlinedIcon /></InputAdornment>) }} fullWidth inputProps={{ min: "1", max: "10" }} label="ระบุจำนวนคำตอบ" helperText="Positive Integer(1-10)" inputRef={(input) => this.getNum = input} defaultValue={this.props.reducer.addnumberReducer.num} /><br /><br /> */}
                                         <TextField required type="text" id="text_of_group" variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><AssignmentIcon /></InputAdornment>) }} fullWidth label="ชื่อกลุ่ม" helperText="A-Z, a-z, 0-9, _ (underscore) And it should start with a letter." inputRef={(input) => this.groupName = input} defaultValue={this.props.reducer.GroupNameReducer} /><br /><br />
                                         {this.props.reducer.ButtonCreateForm ? <Button variant="contained" color="primary" onClick={this.handleSubmit}>สร้างฟอร์ม</Button> :
                                             <Button disabled variant="contained" color="primary">สร้างฟอร์ม</Button>}
@@ -331,22 +350,37 @@ class MainForm extends Component {
                             </Paper>
 
                         </Grid>
-
-                        <Grid item xs={6} sm={6} className={classes.GridCenter}>
+                        <Grid item xs={12} sm={12} className={classes.GridCenter}>
                             {this.props.reducer.showformReducer &&
                                 <Paper className={classes.paper} elevation={3}>
+                                <div>
+                                    <Title>กรุณากรอกข้อมูล</Title>
+                                    <br />
+                                    <TextField type="text" placeholder="คำถาม" id={"question0"} key={"question0"} variant="outlined" style={{ width: 380 }} InputProps={{ startAdornment: (<InputAdornment position="start"><QuestionAnswerOutlinedIcon /></InputAdornment>) }} /> <br /><br />
+                                    <TextField required type="number" id="number_of_choice" variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><AssignmentOutlinedIcon /></InputAdornment>) }} fullWidth inputProps={{ min: "1", max: "10" }} label="ระบุจำนวนคำตอบ" helperText="Positive Integer(1-10)" inputRef={(input) => this.getNum = input} defaultValue={this.props.reducer.addnumberReducer.num} /><br /><br />
+                                    <Button variant="contained" color="primary" onClick={this.setChoice}>ยืนยัน</Button>
+                                    <br />
+
+                                </div>
+                            </Paper>
+                            }
+                        </Grid>
+                        <Grid item xs={6} sm={6} className={classes.GridCenter}>
+                            {this.props.reducer.addnumberReducer.state  &&
+                                <Paper className={classes.paper} elevation={3}>
                                     <div>
-                                        <Title>กรุณากรอกข้อมูล</Title>
+                                        <Title>กรุณากรอกคำตอบ</Title>
                                         <br />
                                         {makeform(this.props.reducer.addnumberReducer.num)}
                                         <br />
                                         <Button variant="contained" color="primary" onClick={this.handleForm}>สร้างคำถาม</Button>
+
                                     </div>
                                 </Paper>
                             }
                         </Grid>
 
-                        {this.props.reducer.showformReducer &&
+                        {this.props.reducer.addnumberReducer.state  &&
                             <Grid item>
                                 <Paper className={classes.paper} elevation={3} >
                                     <Title> เลือกคำถามที่ต้องการจะเพิ่ม </Title>
@@ -405,13 +439,7 @@ const makeform = (num) => {
     let form = []
 
     for (var i = 0; i < parseInt(num) + 1; i++) {
-        if (i === 0) {
-            form.push(<TextField type="text" placeholder="คำถาม" id={"question" + i} key={"question" + i} variant="outlined" style={{ width: 380 }}
-                InputProps={{ startAdornment: (<InputAdornment position="start"><QuestionAnswerOutlinedIcon /></InputAdornment>) }} />)
-            form.push(<br id={"break" + i} key={"break" + i} />, <br id={"break" + i + 1} key={"break" + i + 1} />)
-        }
-
-        else {
+        if(i>0){
             form.push(<TextField type="text" placeholder="คำตอบ" id={"question" + i} key={"question" + i} variant="outlined" helperText="value can't contain more than 20 character A-Z a-z $ # [ ] / or ."
                 InputProps={{ startAdornment: (<InputAdornment position="start"><MessageIcon /></InputAdornment>) }} />)
             form.push(<br id={"break" + i} key={"break" + i} />)
@@ -420,6 +448,7 @@ const makeform = (num) => {
     }
     return form
 }
+
 
 export default connect(mapStateToProps)(withStyles(styles)(MainForm));
 

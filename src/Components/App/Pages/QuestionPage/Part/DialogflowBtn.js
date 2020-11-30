@@ -44,6 +44,9 @@ class DialogflowBtn extends Component {
     this.props.dispatch({
       type: 'CLEAR_FORM'
     })
+    this.props.dispatch({
+      type: 'INIT_NUM'
+    })
     let isSuccess = await RealTimeDB(this.state.accessToken, this.props.reducer.formReducer, this.props.reducer.GroupNameReducer.toUpperCase())
     
     if(isSuccess === true){

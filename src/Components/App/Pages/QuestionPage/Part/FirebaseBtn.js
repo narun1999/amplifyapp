@@ -46,7 +46,9 @@ class FirebaseBtn extends Component {
         this.props.dispatch({
             type: 'CLEAR_FORM'
         })
-
+        this.props.dispatch({
+            type: 'INIT_NUM'
+        })
         var data_on_time = {};
         for (var i = 0; i < this.props.reducer.formReducer.length; i++) {
         
