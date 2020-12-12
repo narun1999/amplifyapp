@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { GoogleLogin } from 'react-google-login';
 import Button from '@material-ui/core/Button';
 import { RealTimeDB } from "./RealTimeDB"
+import { QsTree } from "./QsTree"
 import StorageIcon from '@material-ui/icons/Storage';
 import { withStyles } from '@material-ui/core/styles';
 const CLIENT_ID = "482184180474-vosgudhaspfh5qimdab4d3d8dndv67lf.apps.googleusercontent.com";
@@ -47,8 +48,8 @@ class DialogflowBtn extends Component {
     this.props.dispatch({
       type: 'INIT_NUM'
     })
-    let isSuccess = await RealTimeDB(this.state.accessToken, this.props.reducer.formReducer, this.props.reducer.GroupNameReducer.toUpperCase())
-    
+    // let isSuccess = await RealTimeDB(this.state.accessToken, this.props.reducer.formReducer, this.props.reducer.GroupNameReducer.toUpperCase())
+    let isSuccess = await QsTree(this.state.accessToken, this.props.reducer.formReducer, this.props.reducer.GroupNameReducer.toUpperCase())
     if(isSuccess === true){
       this.props.dispatch({
         type: 'IS_SUCCESS'

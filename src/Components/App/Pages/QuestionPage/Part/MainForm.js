@@ -35,6 +35,12 @@ import {
 } from '@material-ui/pickers';
 // import StorageIcon from '@material-ui/icons/Storage';
 import axios from 'axios';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const styles = theme => ({
     root: {
@@ -109,12 +115,26 @@ const styles = theme => ({
         overflow: 'auto',
         flexDirection: 'column',
     },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    formCheck: {
+        margin: theme.spacing(1)
+    }
 });
 
 const timeElapsed = Date.now();
 const today = new Date(timeElapsed);
 
 class MainForm extends Component {
+    constructor() {
+        super();
+        this.state = {
+            follow_up: "-",
+            checked: false
+        }
+    }
     handleDateChange = (date) => {
         this.props.dispatch({
             type: 'SET_QUESTIONDATE',
@@ -138,6 +158,18 @@ class MainForm extends Component {
             type: 'SHOW_QUESTION'
         })
     };
+    handleSelectChange = (e) => {
+
+        this.setState({
+            follow_up: e.target.value
+        })
+
+    }
+    handleCheckedChange = (e) => {
+        this.setState({
+            checked: e.target.checked
+        })
+    }
     submit = async () => {
         await this.calldata();
         const datetime = this.props.reducer.DateQuestionReducer;
@@ -264,7 +296,7 @@ class MainForm extends Component {
                     is_full = false
                 }
             })
-
+            
             if (is_full) {
                 //console.log(message)
                 const data = {
@@ -272,7 +304,9 @@ class MainForm extends Component {
                     question,
                     answer,
                     editing: false,
-                    formnumber: num
+                    formnumber: num,
+                    followup: this.state.follow_up,
+                    endquestion: this.state.checked
                 }
 
 
@@ -314,11 +348,12 @@ class MainForm extends Component {
         else {
             alert("กรุณากรอกข้อมูลให้ถูกต้องครบถ้วนครับ")
         }
-        console.log(num)
+
     }
 
     render() {
         const { classes } = this.props;
+        const select = this.props.reducer.formReducer
         return (
             <div>
                 <Container maxWidth="md" className={classes.container}>
@@ -353,20 +388,54 @@ class MainForm extends Component {
                         <Grid item xs={12} sm={12} className={classes.GridCenter}>
                             {this.props.reducer.showformReducer &&
                                 <Paper className={classes.paper} elevation={3}>
-                                <div>
-                                    <Title>กรุณากรอกข้อมูล</Title>
-                                    <br />
-                                    <TextField type="text" placeholder="คำถาม" id={"question0"} key={"question0"} variant="outlined" style={{ width: 380 }} InputProps={{ startAdornment: (<InputAdornment position="start"><QuestionAnswerOutlinedIcon /></InputAdornment>) }} /> <br /><br />
-                                    <TextField required type="number" id="number_of_choice" variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><AssignmentOutlinedIcon /></InputAdornment>) }} fullWidth inputProps={{ min: "1", max: "10" }} label="ระบุจำนวนคำตอบ" helperText="Positive Integer(1-10)" inputRef={(input) => this.getNum = input} defaultValue={this.props.reducer.addnumberReducer.num} /><br /><br />
-                                    <Button variant="contained" color="primary" onClick={this.setChoice}>ยืนยัน</Button>
-                                    <br />
+                                    <div>
+                                        <Title>กรุณากรอกข้อมูล</Title>
+                                        <br />
+                                        <TextField type="text" placeholder="คำถาม" id={"question0"} key={"question0"} variant="outlined" style={{ width: 380 }} InputProps={{ startAdornment: (<InputAdornment position="start"><QuestionAnswerOutlinedIcon /></InputAdornment>) }} /> <br /><br />
+                                        <TextField required type="number" id="number_of_choice" variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><AssignmentOutlinedIcon /></InputAdornment>) }} fullWidth inputProps={{ min: "1", max: "10" }} label="ระบุจำนวนคำตอบ" helperText="Positive Integer(1-10)" inputRef={(input) => this.getNum = input} defaultValue={this.props.reducer.addnumberReducer.num} /><br /><br />
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel id="demo-simple-select-label">Follow-Up</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={this.state.follow_up}
+                                                onChange={this.handleSelectChange}
+                                            >
+                                                {/* <MenuItem value={10}>Ten</MenuItem>
+                                                <MenuItem value={20}>Twenty</MenuItem>
+                                                <MenuItem value={30}>Thirty</MenuItem> */}
+                                                {select.map((list, i) => {
+                                                    let anslist = []
+                                                    let ANS = list.answer
+                                                    ANS.forEach((ans, j) => {
+                                                        let val = i.toString() + "," + j.toString() + "," + ans
+                                                        anslist.push(<MenuItem key={i + j} value={val} >{i + 1}.{j + 1} {ans}</MenuItem>)
+                                                    })
+                                                    return anslist
+                                                })}
+                                            </Select>
+                                        </FormControl>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={this.state.checked}
+                                                    onChange={this.handleCheckedChange}
+                                                    name="checkedB"
+                                                    color="primary"
+                                                />
+                                            }
+                                            label="End Question"
+                                        />
+                                        <br />
+                                        <Button variant="contained" color="primary" onClick={this.setChoice}>ยืนยัน</Button>
+                                        <br />
 
-                                </div>
-                            </Paper>
+                                    </div>
+                                </Paper>
                             }
                         </Grid>
                         <Grid item xs={6} sm={6} className={classes.GridCenter}>
-                            {this.props.reducer.addnumberReducer.state  &&
+                            {this.props.reducer.addnumberReducer.state &&
                                 <Paper className={classes.paper} elevation={3}>
                                     <div>
                                         <Title>กรุณากรอกคำตอบ</Title>
@@ -380,7 +449,7 @@ class MainForm extends Component {
                             }
                         </Grid>
 
-                        {this.props.reducer.addnumberReducer.state  &&
+                        {this.props.reducer.addnumberReducer.state &&
                             <Grid item>
                                 <Paper className={classes.paper} elevation={3} >
                                     <Title> เลือกคำถามที่ต้องการจะเพิ่ม </Title>
@@ -439,7 +508,7 @@ const makeform = (num) => {
     let form = []
 
     for (var i = 0; i < parseInt(num) + 1; i++) {
-        if(i>0){
+        if (i > 0) {
             form.push(<TextField type="text" placeholder="คำตอบ" id={"question" + i} key={"question" + i} variant="outlined" helperText="value can't contain more than 20 character A-Z a-z $ # [ ] / or ."
                 InputProps={{ startAdornment: (<InputAdornment position="start"><MessageIcon /></InputAdornment>) }} />)
             form.push(<br id={"break" + i} key={"break" + i} />)
