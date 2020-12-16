@@ -296,7 +296,7 @@ class MainForm extends Component {
                     is_full = false
                 }
             })
-            
+
             if (is_full) {
                 //console.log(message)
                 const data = {
@@ -476,6 +476,7 @@ class MainForm extends Component {
                                 <Grid item xs sm={6} >
                                     <Paper elevation={3} className={classes.paper}>
                                         <Title>คำถามที่{index + 1}</Title>
+                                        {follow_text(this.props.reducer.formReducer[index].followup, index)}
                                         <Paper elevation={0}> {form.editing ? <QuestionEditing key={index} form={form} index={index} /> : <Question key={index} form={form} index={index} />} </Paper>
                                     </Paper>
                                 </Grid>
@@ -518,6 +519,18 @@ const makeform = (num) => {
     return form
 }
 
+const follow_text = (followup, index) => {
+    if (index !== 0) {
+        let aArr = []
+        aArr = followup.split(',')
+        aArr[0] = (parseInt(aArr[0]) + 1).toString()
+        aArr[1] = (parseInt(aArr[1]) + 1).toString()
+        return <Title>Follow Up: {aArr[0]}.{aArr[1]} {aArr[2]}</Title>
+    }
+    else {
+        return <Title>Follow Up: {followup}</Title>
+    }
+}
 
 export default connect(mapStateToProps)(withStyles(styles)(MainForm));
 

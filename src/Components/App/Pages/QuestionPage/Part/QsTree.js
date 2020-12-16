@@ -67,7 +67,7 @@ export const QsTree = async (accessToken, form, groupname) => {
             let trainingPhrasesParts = [];
             let has_parameter
             let resetcontext
-            let action = ""
+            let action = "put_to_firebase"
             let params = []
             if (formArr[i].followup === "-") {
                 // console.log(formArr[i])         {answer: ["",""], question: ['']}
