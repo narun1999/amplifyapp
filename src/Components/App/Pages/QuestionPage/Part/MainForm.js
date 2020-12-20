@@ -13,6 +13,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import Question from './Question';
 import QuestionEditing from './QuestionEditing';
 import DialogflowBtn from './DialogflowBtn'
+import DialogflowBtn2 from './DialogflowBtn2'
 import FirebaseBtn from './FirebaseBtn'
 import Title from "./Title";
 import Container from '@material-ui/core/Container';
@@ -132,7 +133,9 @@ class MainForm extends Component {
         super();
         this.state = {
             follow_up: "-",
-            checked: false
+            checked: false,
+            type_text: false,
+            type_choice: false
         }
     }
     handleDateChange = (date) => {
@@ -168,6 +171,18 @@ class MainForm extends Component {
     handleCheckedChange = (e) => {
         this.setState({
             checked: e.target.checked
+        })
+    }
+    handleTypeTextChange = (e) => {
+        this.setState({
+            type_text: e.target.checked,
+            type_choice: false
+        })
+    }
+    handleTypeChoiceChange = (e) => {
+        this.setState({
+            type_choice: e.target.checked,
+            type_text: false
         })
     }
     submit = async () => {
@@ -334,20 +349,35 @@ class MainForm extends Component {
 
     setChoice = (e) => {
         let num = document.getElementById("number_of_choice").value
-        if (num > 0 && num <= 10) {
-            const data = {
-                id: Date.now(),
-                state: true,
-                num,
+        if (this.state.type_choice) {
+            if (num > 0 && num <= 10) {
+                const data = {
+                    id: Date.now(),
+                    state: true,
+                    num,
+                }
+                this.props.dispatch({
+                    type: 'ADD_NUM',
+                    data
+                });
             }
-            this.props.dispatch({
-                type: 'ADD_NUM',
-                data
-            });
+            else {
+                alert("กรุณากรอกข้อมูลให้ถูกต้องครบถ้วนครับ")
+            }
+        }else{
+            if (num > 0 && num <= 20) {
+                const data = {
+                    id: Date.now(),
+                    state: true,
+                    num,
+                }
+                this.props.dispatch({
+                    type: 'ADD_NUM',
+                    data
+                });
+            }
         }
-        else {
-            alert("กรุณากรอกข้อมูลให้ถูกต้องครบถ้วนครับ")
-        }
+
 
     }
 
@@ -378,6 +408,29 @@ class MainForm extends Component {
                                     <form onSubmit={this.handleSubmit}>
                                         {/* <TextField required type="number" id="number_of_choice" variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><AssignmentOutlinedIcon /></InputAdornment>) }} fullWidth inputProps={{ min: "1", max: "10" }} label="ระบุจำนวนคำตอบ" helperText="Positive Integer(1-10)" inputRef={(input) => this.getNum = input} defaultValue={this.props.reducer.addnumberReducer.num} /><br /><br /> */}
                                         <TextField required type="text" id="text_of_group" variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><AssignmentIcon /></InputAdornment>) }} fullWidth label="ชื่อกลุ่ม" helperText="A-Z, a-z, 0-9, _ (underscore) And it should start with a letter." inputRef={(input) => this.groupName = input} defaultValue={this.props.reducer.GroupNameReducer} /><br /><br />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={this.state.type_text}
+                                                    onChange={this.handleTypeTextChange}
+                                                    name="typetext"
+                                                    color="primary"
+                                                />
+                                            }
+                                            label="ข้อความ"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={this.state.type_choice}
+                                                    onChange={this.handleTypeChoiceChange}
+                                                    name="typechoice"
+                                                    color="primary"
+                                                />
+                                            }
+                                            label="ตัวเลือก"
+                                        />
+                                        <br /><br />
                                         {this.props.reducer.ButtonCreateForm ? <Button variant="contained" color="primary" onClick={this.handleSubmit}>สร้างฟอร์ม</Button> :
                                             <Button disabled variant="contained" color="primary">สร้างฟอร์ม</Button>}
                                     </form>
@@ -385,6 +438,7 @@ class MainForm extends Component {
                             </Paper>
 
                         </Grid>
+
                         <Grid item xs={12} sm={12} className={classes.GridCenter}>
                             {this.props.reducer.showformReducer &&
                                 <Paper className={classes.paper} elevation={3}>
@@ -484,16 +538,17 @@ class MainForm extends Component {
                         }
                     </Grid>
 
-                    {this.props.reducer.showquestionReducer && this.props.reducer.formReducer.length !== 0 &&
+                    {this.props.reducer.showquestionReducer && this.props.reducer.formReducer.length !== 0 && this.state.type_choice &&
                         <Grid item xs={12} sm={12} className={classes.GridBtn}>
                             <DialogflowBtn />
                             <FirebaseBtn />
                         </Grid>}
-                    {/* <Box pt={4}>
-                        <Typography variant="body2" color="textSecondary" align="center">
-                            {'Copyright © '}<Link color="inherit" href="">Your Website</Link>{' '}{new Date().getFullYear()}{'.'}
-                        </Typography>
-                    </Box> */}
+                    {this.props.reducer.showquestionReducer && this.props.reducer.formReducer.length !== 0 && this.state.type_text &&
+                        <Grid item xs={12} sm={12} className={classes.GridBtn}>
+                            <DialogflowBtn2 />
+                        </Grid>}
+
+
                 </Container>
             </div>
         );
